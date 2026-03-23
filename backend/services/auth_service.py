@@ -20,11 +20,13 @@ class AuthService:
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """Verify password"""
+        plain_password = plain_password[:72]
         return pwd_context.verify(plain_password, hashed_password)
     
     @staticmethod
     def get_password_hash(password: str) -> str:
         """Hash password"""
+        password = password[:72]
         return pwd_context.hash(password)
     
     @staticmethod
