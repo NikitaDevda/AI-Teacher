@@ -1,78 +1,11 @@
-// import axios from 'axios';
-
-// const API_BASE_URL = 'http://localhost:8000';
-
-// const api = axios.create({
-//   baseURL: API_BASE_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// });
-
-// export const teachingAPI = {
-//   // Ask question
-//   askQuestion: async (question, sessionId = null, subject = 'general') => {
-//     const response = await api.post('/api/ask', {
-//       question,
-//       session_id: sessionId,
-//       subject,
-//       language: 'hi'
-//     });
-//     return response.data;
-//   },
-
-//   // Interrupt with doubt
-//   interruptWithDoubt: async (doubt, sessionId, subject = 'general') => {
-//     const response = await api.post('/api/interrupt', {
-//       question: doubt,
-//       session_id: sessionId,
-//       subject,
-//       language: 'hi'
-//     });
-//     return response.data;
-//   },
-
-//   // Transcribe audio
-//   transcribeAudio: async (audioBlob) => {
-//     const formData = new FormData();
-//     formData.append('file', audioBlob, 'audio.webm');
-    
-//     const response = await api.post('/api/transcribe', formData, {
-//       headers: {
-//         'Content-Type': 'multipart/form-data',
-//       },
-//     });
-//     return response.data;
-//   },
-
-//   // Get session history
-//   getSession: async (sessionId) => {
-//     const response = await api.get(`/api/session/${sessionId}`);
-//     return response.data;
-//   },
-// };
-
-// export default api;
-
-
-
-
-
-
 
 
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000';
+// const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://ai-teacher-q4pe.onrender.com';
 
-// Create axios instance
-// const api = axios.create({
-//   baseURL: API_BASE_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// });
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
