@@ -1,5 +1,3 @@
-
-
 from datetime import datetime
 import os
 import uuid
@@ -35,9 +33,6 @@ from services.email_service import email_service
 from dotenv import load_dotenv
 load_dotenv()
 
-# ========================================
-# FASTAPI APP
-# ========================================
 
 app = FastAPI(
     title="AI Study Portal - Complete System",
@@ -45,38 +40,16 @@ app = FastAPI(
     version="3.0.0"
 )
 
-# ========================================
-# CORS MIDDLEWARE
-# ========================================
-# ========================================
-# CORS MIDDLEWARE
-# ========================================
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  
     # "https://ai-teacher-84vo.vercel.app",
-    allow_credentials=False,    # ← यह करो
+    allow_credentials=False,   
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=[
-#         "http://localhost:3000",
-#         "http://localhost:5173",
-#         "http://127.0.0.1:3000",
-#         "http://127.0.0.1:5173",
-#     ],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-    
-# )
 
-# ========================================
-# CREATE DIRECTORIES
-# ========================================
 
 TEMP_DIRS = [
     "temp/videos",
@@ -91,9 +64,6 @@ TEMP_DIRS = [
 for dir_path in TEMP_DIRS:
     os.makedirs(dir_path, exist_ok=True)
 
-# ========================================
-# STATIC FILE MOUNTS
-# ========================================
 
 app.mount("/temp/videos", StaticFiles(directory="temp/videos"), name="videos")
 app.mount("/temp/audio", StaticFiles(directory="temp/audio"), name="audio")
@@ -104,34 +74,25 @@ app.mount("/temp/graphs", StaticFiles(directory="temp/graphs"), name="graphs")
 app.mount("/temp/images", StaticFiles(directory="temp/images"), name="images")
 app.mount("/temp", StaticFiles(directory="temp"), name="temp")
 
-# ========================================
-# STARTUP EVENT
-# ========================================
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize database and services on startup"""
     init_db()
     print("\n" + "="*60)
-    print("🚀 AI STUDY PORTAL - SYSTEM STARTING")
+    print("AI STUDY PORTAL - SYSTEM STARTING")
     print("="*60)
-    print("✅ Database initialized")
-    print("✅ All services ready")
-    print("✅ Static files mounted")
+    print("Database initialized")
+    print("All services ready")
+    print("Static files mounted")
     print("="*60)
-    print("🌐 Server running on: http://localhost:8000")
-    print("📚 API Docs: http://localhost:8000/docs")
+    print("Server running on: http://localhost:8000")
+    print("API Docs: http://localhost:8000/docs")
     print("="*60 + "\n")
 
-# ========================================
-# SECURITY
-# ========================================
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login", auto_error=False)
 
-# ========================================
-# PYDANTIC MODELS
-# ========================================
 
 class UserRegister(BaseModel):
     email: EmailStr
@@ -148,9 +109,6 @@ class Token(BaseModel):
     token_type: str
     user: dict
 
-# ========================================
-# DEPENDENCY FUNCTIONS
-# ========================================
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
@@ -200,27 +158,24 @@ async def get_current_user_optional(
     
     return None
 
-# ========================================
-# BASIC ENDPOINTS
-# ========================================
 
 @app.get("/")
 async def root():
     """Root endpoint - API info"""
     return {
-        "message": "AI Study Portal - Complete Educational Platform ✅",
+        "message": "AI Study Portal - Complete Educational Platform",
         "version": "3.0.0",
         "status": "running",
         "features": [
-            "🎬 AI-Generated Video Lessons (Audio Synced)",
-            "📊 Auto-Generated Graphs & Visualizations",
-            "📝 Worked Examples & Derivations",
-            "📄 PDF Study Notes",
-            "📊 PowerPoint Presentations",
-            "✍️ Practice Assignments with Answer Keys",
-            "👤 User Authentication & Profiles",
-            "💾 Lesson History & Dashboard",
-            "🎯 Subject-Specific Content"
+            "AI-Generated Video Lessons (Audio Synced)",
+            "Auto-Generated Graphs & Visualizations",
+            "Worked Examples & Derivations",
+            "PDF Study Notes",
+            "PowerPoint Presentations",
+            "Practice Assignments with Answer Keys",
+            "User Authentication & Profiles",
+            "Lesson History & Dashboard",
+            "Subject-Specific Content"
         ],
         "endpoints": {
             "docs": "/docs",
@@ -240,23 +195,20 @@ async def health_check():
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
         "services": {
-            "database": "✅ Running",
-            "ai_service": "✅ Running",
-            "video_generation": "✅ Running (Synced)",
-            "graph_generation": "✅ Running",
-            "pdf_generation": "✅ Running",
-            "ppt_generation": "✅ Running",
-            "assignment_generation": "✅ Running"
+            "database": "Running",
+            "ai_service": "Running",
+            "video_generation": "Running (Synced)",
+            "graph_generation": "Running",
+            "pdf_generation": "Running",
+            "ppt_generation": "Running",
+            "assignment_generation": "Running"
         },
         "temp_dirs": {
-            dir_path: "✅ Ready" if os.path.exists(dir_path) else "❌ Missing"
+            dir_path: "Ready" if os.path.exists(dir_path) else " Missing"
             for dir_path in TEMP_DIRS
         }
     }
 
-# ========================================
-# AUTHENTICATION ENDPOINTS
-# ========================================
 
 @app.post("/api/auth/register")
 async def register(user_data: UserRegister, db: Session = Depends(get_db)):
@@ -369,9 +321,6 @@ async def get_current_user_info(
         }
     }
 
-# ========================================
-# MAIN LESSON GENERATION ENDPOINT
-# ========================================
 
 @app.post("/api/ask", response_model=SessionResponse)
 async def ask_question(
@@ -399,49 +348,38 @@ async def ask_question(
         # Log request
         print(f"\n{'='*60}")
         if current_user:
-            print(f"👤 User: {current_user.username} ({current_user.email})")
+            print(f" User: {current_user.username} ({current_user.email})")
         else:
-            print(f"👤 Guest User (not logged in)")
-        print(f"📝 Question: {request.question}")
-        print(f"📚 Subject: {request.subject}")
-        print(f"🔑 Session ID: {session_id}")
-        print(f"{'='*60}\n")
+            print(f" Guest User (not logged in)")
+       
         
-        # ========================================
-        # 1. GENERATE AI ANSWER
-        # ========================================
-        print("🤖 Step 1/7: Generating AI answer...")
+        
+        print(" Step 1/7: Generating AI answer...")
         answer = ai_service.generate_answer(request.question, request.subject)
-        print(f"✅ AI answer generated ({len(answer)} characters)")
+        print(f" AI answer generated ({len(answer)} characters)")
         
-        # ========================================
-        # 2. PARSE CONTENT
-        # ========================================
-        print("📝 Step 2/7: Parsing content structure...")
+  
+        print(" Step 2/7: Parsing content structure...")
         parsed_content = content_parser.parse_content(answer)
         
-        # Prepare content data for generators
+
         content_data = parsed_content[0] if parsed_content else {
             'heading': request.question,
             'definition': answer[:200] if len(answer) > 200 else answer,
             'points': []
         }
-        print(f"✅ Content parsed: {content_data.get('heading', 'Untitled')}")
+        print(f" Content parsed: {content_data.get('heading', 'Untitled')}")
         
-        # ========================================
-        # 3. GENERATE AUDIO
-        # ========================================
+     
         print("🎵 Step 3/7: Generating audio narration...")
         audio_filename = f"audio_{int(time.time())}_{session_id[:8]}.mp3"
         audio_path = f"temp/audio/{audio_filename}"
         
         ai_service.text_to_speech(answer, audio_path)
         audio_url = f"http://localhost:8000/temp/audio/{audio_filename}"
-        print(f"✅ Audio generated: {audio_filename}")
+        print(f" Audio generated: {audio_filename}")
         
-        # ========================================
-        # 4. GENERATE VIDEO (SYNCED WITH AUDIO)
-        # ========================================
+
         print("🎬 Step 4/7: Generating video (synced with audio, graphs included)...")
         video_filename = f"lesson_{int(time.time())}_{session_id[:8]}.mp4"
         video_path = f"temp/videos/{video_filename}"
@@ -451,43 +389,37 @@ async def ask_question(
             audio_path=audio_path,
             output_path=video_path,
             topic=request.question,
-            answer_text=answer  # For graph detection
+            answer_text=answer  
         )
         
         video_url = f"http://localhost:8000/temp/videos/{video_filename}"
-        print(f"✅ Video generated (synced): {video_filename}")
+        print(f" Video generated (synced): {video_filename}")
         
-        # ========================================
-        # 5. GENERATE PDF NOTES
-        # ========================================
-        print("📄 Step 5/7: Generating PDF notes...")
+  
+        print(" Step 5/7: Generating PDF notes...")
         pdf_filename = f"notes_{int(time.time())}_{session_id[:8]}.pdf"
         
         try:
             pdf_path = pdf_generator.generate_notes(content_data, pdf_filename)
             pdf_notes_url = f"http://localhost:8000/temp/notes/{pdf_filename}" if pdf_path else None
-            print(f"✅ PDF generated: {pdf_filename}")
+            print(f"PDF generated: {pdf_filename}")
         except Exception as e:
-            print(f"⚠️ PDF generation failed: {e}")
+            print(f" PDF generation failed: {e}")
             pdf_notes_url = None
         
-        # ========================================
-        # 6. GENERATE POWERPOINT SLIDES
-        # ========================================
+       
         print("📊 Step 6/7: Generating PowerPoint presentation...")
         ppt_filename = f"slides_{int(time.time())}_{session_id[:8]}.pptx"
         
         try:
             ppt_path = ppt_generator.generate_presentation(content_data, ppt_filename)
             ppt_url = f"http://localhost:8000/temp/presentations/{ppt_filename}" if ppt_path else None
-            print(f"✅ PPT generated: {ppt_filename}")
+            print(f" PPT generated: {ppt_filename}")
         except Exception as e:
-            print(f"⚠️ PPT generation failed: {e}")
+            print(f"PPT generation failed: {e}")
             ppt_url = None
         
-        # ========================================
-        # 7. GENERATE ASSIGNMENT
-        # ========================================
+
         print("📝 Step 7/7: Generating practice assignment...")
         topic = content_data.get('heading', request.question)
         
@@ -505,10 +437,10 @@ async def ask_question(
             
             # Get assignment data for web display
             assignment_data = assignment_generator._generate_questions_ai(topic, 'medium')
-            print(f"✅ Assignment generated")
+            print(f" Assignment generated")
             
         except Exception as e:
-            print(f"⚠️ Assignment generation failed: {e}")
+            print(f" Assignment generation failed: {e}")
             assignment_url = None
             answers_url = None
             assignment_data = {
@@ -522,16 +454,14 @@ async def ask_question(
                 ]
             }
         
-        # ========================================
-        # 8. PREPARE WEB CONTENT
-        # ========================================
-        print("🌐 Preparing web-friendly content...")
+      
+        print("Preparing web-friendly content...")
         
         # Notes content for web viewer
         notes_content = {
             'heading': content_data.get('heading', 'Lesson Notes'),
             'definition': content_data.get('definition', ''),
-            'points': content_data.get('points', [])[:15],  # First 15 points
+            'points': content_data.get('points', [])[:15],  
             'generated_at': datetime.now().isoformat()
         }
         
@@ -554,7 +484,7 @@ async def ask_question(
         
         # Points slides (2 points per slide)
         points = content_data.get('points', [])
-        for i in range(0, min(len(points), 12), 2):  # Max 6 slides of points
+        for i in range(0, min(len(points), 12), 2):  
             slide_points = []
             
             if i < len(points):
@@ -569,11 +499,8 @@ async def ask_question(
                     'points': slide_points
                 })
         
-        print(f"✅ Web content prepared ({len(slides_content)} slides)")
+        print(f" Web content prepared ({len(slides_content)} slides)")
         
-        # ========================================
-        # 9. SAVE TO DATABASE (IF LOGGED IN)
-        # ========================================
         if current_user:
             try:
                 print(f"💾 Saving lesson to {current_user.username}'s account...")
@@ -602,28 +529,16 @@ async def ask_question(
                 db.commit()
                 db.refresh(lesson)
                 
-                print(f"✅ Lesson saved to database (ID: {lesson.id})")
+                print(f"Lesson saved to database (ID: {lesson.id})")
                 
             except Exception as e:
-                print(f"⚠️ Database save failed: {e}")
+                print(f"Database save failed: {e}")
                 db.rollback()
         else:
-            print("ℹ️ Guest user - lesson generated but NOT saved to account")
-            print("💡 Create account to save your lessons!")
+            print(" Guest user - lesson generated but NOT saved to account")
+            print(" Create account to save your lessons!")
         
-        # ========================================
-        # 10. PREPARE RESPONSE
-        # ========================================
-        print(f"\n{'='*60}")
-        print("✅ ALL MATERIALS GENERATED SUCCESSFULLY!")
-        print(f"{'='*60}")
-        print(f"📹 Video: {video_url}")
-        print(f"🎵 Audio: {audio_url}")
-        print(f"📄 PDF: {pdf_notes_url}")
-        print(f"📊 PPT: {ppt_url}")
-        print(f"📝 Assignment: {assignment_url}")
-        print(f"✅ Answers: {answers_url}")
-        print(f"{'='*60}\n")
+       
         
         return SessionResponse(
             session_id=session_id,
@@ -656,9 +571,6 @@ async def ask_question(
             detail=f"Lesson generation failed: {str(e)}"
         )
 
-# ========================================
-# USER DASHBOARD ENDPOINTS
-# ========================================
 
 @app.get("/api/user/lessons")
 async def get_user_lessons(
@@ -827,9 +739,6 @@ async def mark_lesson_complete(
         "message": "Lesson marked as complete"
     }
 
-# ========================================
-# ADDITIONAL ENDPOINTS
-# ========================================
 
 @app.post("/api/transcribe")
 async def transcribe_audio(file: UploadFile = File(...)):
@@ -914,9 +823,6 @@ async def get_session(session_id: str):
         "history": history
     }
 
-# ========================================
-# RUN SERVER
-# ========================================
 
 if __name__ == "__main__":
     import uvicorn
@@ -927,4 +833,4 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
-# # uvicorn main:app --reload
+
