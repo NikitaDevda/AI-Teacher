@@ -18,9 +18,6 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# ========================================
-# DATABASE MODELS
-# ========================================
 
 class User(Base):
     __tablename__ = "users"
@@ -32,7 +29,7 @@ class User(Base):
     full_name = Column(String(200))
     
     is_active = Column(Boolean, default=True)
-    is_verified = Column(Boolean, default=True)  # Set to True for development
+    is_verified = Column(Boolean, default=True) 
     verification_token = Column(String(255))
     
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -103,15 +100,11 @@ class AssignmentSubmission(Base):
     submitted_at = Column(DateTime, default=datetime.utcnow)
 
 
-# ========================================
-# INITIALIZE DATABASE
-# ========================================
-
 def init_db():
     """Create all tables"""
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created!")
-    print(f"📂 Database file: {SQLALCHEMY_DATABASE_URL}")
+    print("Database tables created!")
+    print(f"Database file: {SQLALCHEMY_DATABASE_URL}")
 
 
 def get_db():
