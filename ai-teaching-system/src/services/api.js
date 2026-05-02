@@ -1,6 +1,3 @@
-
-
-
 import axios from 'axios';
 
 // const API_BASE_URL = 'http://localhost:8000';
@@ -11,10 +8,10 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: false,  // ← यह add करो
+  withCredentials: false, 
 });
 
-// Request interceptor - Add JWT token to all requests
+// Request interceptor 
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -28,7 +25,7 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor - Handle token expiration
+// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -47,10 +44,6 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// ========================================
-// TEACHING API
-// ========================================
 
 export const teachingAPI = {
   // Ask question (works with or without auth)
@@ -115,9 +108,7 @@ export const teachingAPI = {
   },
 };
 
-// ========================================
-// AUTH API
-// ========================================
+
 
 export const authAPI = {
   // Login
@@ -173,9 +164,6 @@ export const authAPI = {
   },
 };
 
-// ========================================
-// USER API (Dashboard)
-// ========================================
 
 export const userAPI = {
   // Get user's lessons
@@ -222,10 +210,6 @@ export const userAPI = {
     }
   },
 };
-
-// ========================================
-// HELPER FUNCTIONS
-// ========================================
 
 export const apiHelpers = {
   // Set auth token
