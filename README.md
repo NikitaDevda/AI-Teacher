@@ -33,13 +33,13 @@ The platform aims to make quality education accessible to everyone by automating
 - **Lesson History**: Access all previously generated lessons
 - **Guest Mode**: Try the platform without creating an account
 
-### 📊 Interactive Features
+### Interactive Features
 - **Editable Notes**: Modify and personalize study notes
 - **Carousel Slides**: Navigate through presentation slides
 - **Interactive Quizzes**: Multiple choice, true/false, and short answer questions
 - **Instant Feedback**: Auto-grading with explanations
 
-### 🎯 Subject Coverage
+### Subject Coverage
 - Mathematics (Algebra, Calculus, Geometry, Trigonometry)
 - Physics (Mechanics, Thermodynamics, Electromagnetism)
 - Chemistry (Organic, Inorganic, Physical Chemistry)
@@ -223,4 +223,4 @@ VITE_API_BASE_URL=http://localhost:8000  # Development
 # VITE_API_BASE_URL=https://your-backend.com  # Production
 ```
 
-## 📁 Project Structure
+##  Project Structure
