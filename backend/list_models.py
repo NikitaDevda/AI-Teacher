@@ -6,12 +6,12 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-print("📋 Available Gemini Models:\n")
+print("Available Gemini Models:\n")
 
 try:
     models = client.models.list()
     for model in models:
-        print(f"✅ {model.name}")
+        print(f"{model.name}")
         if hasattr(model, 'display_name'):
             print(f"   Display: {model.display_name}")
         if hasattr(model, 'supported_generation_methods'):
